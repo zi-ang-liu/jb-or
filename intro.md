@@ -1,4 +1,22 @@
-# 社会システム
+# オペレーションズ・リサーチ
+
+## 講義情報
+
+- 授業名：計算機実習A
+- 曜日：水曜日
+- 時間：1限（9:00-10:40）
+- 教室：西館 W203
+
+## Links
+
+- 講義資料：[コンピュータリテラシー](https://zi-ang-liu.github.io/jb-cs101/)
+- 演習課題：[Google Classroom](https://classroom.google.com/c/NzYyMTI5NTMwNjk1?cjc=fhdwwdgz)
+- 画面共用：[Meet](https://meet.google.com/gxw-nvog-tuh)
+- 講義改善：[Google Form](https://forms.gle/MfVHGFVDyYzuDF9n8)
+- 公欠申請：[Google Form](https://forms.gle/JNXsgTWQBpYbVJFR9)
+
+## データ
+
 
 I am a book about ... something! Wikipedia has [information about books](wiki:book): hover over the link for more information.
 
