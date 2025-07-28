@@ -9,7 +9,7 @@
 
 ## Links
 
-- 講義資料：[コンピュータリテラシー](https://zi-ang-liu.github.io/jb-or)
+- 講義資料：[オペレーションズ・リサーチB](https://zi-ang-liu.github.io/jb-or)
 - 演習課題：[Google Classroom]()
 - 画面共用：[Meet]()
 - 講義改善：[Google Form]()
