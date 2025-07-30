@@ -16,6 +16,9 @@ project:
   # To autogenerate a Table of Contents, run "jupyter book init --write-toc"
   toc:
     - file: doc/intro.md
+    - title: 在庫モデル
+      children:
+        - file: doc/inventory/eoq.md
     
 site:
   template: book-theme
