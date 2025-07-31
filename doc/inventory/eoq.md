@@ -6,30 +6,11 @@ kernelspec:
 
 # 経済的発注量
 
-| 英語                    | 日本語       |
-| ----------------------- | ------------ |
-| Economic Order Quantity | 経済的発注量 |
-| Deterministic           | 決定論的     |
-| Constant                | 一定         |
-
-
-記号を以下のように定義する。
-
-| 記号  | 説明                   |
-| :---: | :--------------------- |
-|  $d$  | 単位時間あたりの需要量 |
-|  $Q$  | 発注量                 |
-|  $K$  | 発注費用               |
-|  $h$  | 保管費用               |
-|  $c$  | 購入単価               |
-|  $T$  | サイクルの長さ         |
-
 **経済的発注量**（EOQ: Economic Order Quantity）モデルは、最も基本的な在庫管理モデルの一つである。このモデルは、[Harris, (1913)](https://doi.org/10.1287/opre.38.6.947)によって提案された。
 
 
 :::{code-cell} python
 :tags: [remove-input, remove-output]
-:tags: [remove-input]
 !pip install matplotlib numpy
 import matplotlib.pyplot as plt
 import numpy as np
@@ -47,8 +28,6 @@ EOQモデルの最適解は次の二つの性質を持つ[(Snyder & Shen, 2019)]
 2. Constant order sizes. 発注量は一定である。需要率 $d$ が一定であり、在庫量が0のときに発注を行うため、最適発注量も一定である。
 
 以上の性質から、在庫量の時間的変化は下図のようになる。
-
-
 
 :::{code-cell} python
 :tags: [remove-input]
@@ -71,7 +50,7 @@ plt.ylabel("Inventory Level", fontsize=14)
 plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)
 plt.axhline(0, color="gray", linewidth=1)
-plt.ylim(bottom=0)
+plt.ylim(bottom=0, top=Q + 100)
 plt.tight_layout()
 plt.show()
 :::
@@ -96,17 +75,70 @@ $$
 となる。
 :::
 
-## コスト
+## コスト関数
 
-総コストは、発注コスト、保管コスト、購入コストの和である。ここでは、**1サイクルの総コストを考える**。
+ここでは、1サイクルあたりのコストを考える。
 
-発注は1回だけ行うため、発注コストは $K$ である。
+**発注コスト**：発注は1回だけ行うため、発注コストは $K$ である。
 
+**購入コスト**：$Q$ 個の商品を単価 $c$ で購入するため、購入コストは $cQ$ である。
+
+**保管コスト**：在庫量はサイクルの長さ $T$ の間に $Q$ 個から0個まで減少するため、平均在庫量は $\frac{Q}{2}$ である。したがって、平均保管コストは $\frac{hQ}{2}$ である。サイクルの長さ $T$ は $\frac{Q}{d}$ であるため、1サイクルあたりの保管コストは
+
+$$
+\frac{hQ}{2} \cdot T = \frac{hQ^2}{2d}
+$$
+
+となる。
+
+以上より、1サイクルあたりのコストは次のように表される。
+
+$$
+K + cQ + \frac{hQ^2}{2d}
+$$
+
+平均コストは、これをサイクルの長さ $T$ で割ったものとして定義される。したがって、平均コスト $g(Q)$ は次のように表される。
+
+$$
+\begin{align*}
+g(Q) &= \frac{1}{T} \left( K + cQ + \frac{hQ^2}{2d} \right) \\
+&= \frac{d}{Q} \left( K + cQ + \frac{hQ^2}{2d} \right) \\
+&= \frac{Kd}{Q} + c d + \frac{hQ}{2}
+\end{align*}
+$$
+
+以上より、平均コストは発注量 $Q$ の関数として次のように表される。
+
+$$
+g(Q) = \frac{Kd}{Q} + cd + \frac{hQ}{2}
+$$
 
 
 ## 最適発注量
 
+EOQモデルの目的は、平均コスト $g(Q)$ を最小化する発注量 $Q$ を求めることである。
 
+平均コストの導関数 $g'(Q)$ が 0 となる点を求めることで、最適発注量 $Q^*$ を求めることができる。
+
+$$
+g'(Q) = -\frac{Kd}{Q^2} + \frac{h}{2} = 0
+$$
+
+これを解くと、最適発注量 $Q^*$ は次のように表される。
+
+$$
+Q^* = \sqrt{\frac{2Kd}{h}}
+$$
+
+二階導関数 $g''(Q)$ を求めて、最適発注量が最小値を与えることを確認する。
+
+$$
+g''(Q) = \frac{2Kd}{Q^3} > 0
+$$
+
+したがって、$Q^*$ は最小値を与える。
+
+最適発注量 $Q^*$ を次の定理にまとめる。
 
 :::{prf:theorem} Economic Order Quantity
 :label: theorem:eoq
@@ -121,9 +153,109 @@ $$
 
 :::
 
+:::{note}
+以上から、最適発注量 $Q^*$ は購入単価 $c$ には依存しないことがわかる。
+:::
+
+次の図は、発注コスト、保管コスト、平均コストの関係を示している。購入単価を $c = 0$ とする。
+
+:::{code-cell} python
+:tags: [remove-input]
+# Parameters
+K = 500  # Order cost
+h = 15     # Holding cost
+c = 0    # Purchase cost
+Q = np.linspace(1, 50, 50)
+
+# Average cost function
+g = (K / Q) + c + (h * Q / 2)
+
+# Plotting the cost functions
+plt.figure(figsize=(12, 6))
+plt.plot(Q, K / Q, label="Order Cost", color="blue", linewidth=2)
+plt.plot(Q, c + (h * Q / 2), label="Holding Cost", color="orange", linewidth=2)
+plt.plot(Q, g, label="Average Cost", color="green", linewidth=2)
+plt.axvline(x=np.sqrt(2 * K / h), color="red", linestyle="--", label="Optimal Order Quantity", linewidth=2)
+plt.xlabel("Order Quantity (Q)", fontsize=14)
+plt.ylabel("Cost", fontsize=14)
+plt.xticks(fontsize=12)
+plt.yticks(fontsize=12)
+plt.title("Cost Functions in EOQ Model", fontsize=16)
+plt.legend(fontsize=12)
+plt.tight_layout()
+plt.show()  
+:::
+
+平均コストが最小となる発注量 $Q^*$ は、発注コストと保管コストの交差点である。すなわち、発注コストと保管コストを等しくする発注量は最適な発注量 $Q^*$ である。この性質は以下の式からわかる。
+
+$$
+\frac{Kd}{Q^*} = \frac{hQ^*}{2} \Longrightarrow Q^* = \sqrt{\frac{2Kd}{h}}
+$$
+
 :::{prf:example}
 :label: example:eoq
 
-A example.
+ある電気量販店では、毎月250台のPCが販売されている。発注費用は5000円、保管費用は1台あたり月150円、購入単価は10万円とする。このとき、最適発注量 $Q^*$ は次のように求められる。
+
+$$
+Q^* = \sqrt{\frac{2 \cdot 5000 \cdot 250}{150}}
+$$
 
 :::
+
+## 練習
+
+
+
+## 補足
+
+### 実装
+
+```python
+def eoq(K, d, h):
+    """
+    Calculate the Economic Order Quantity (EOQ).
+    
+    Parameters:
+    K (float): Order cost
+    d (float): Demand rate
+    h (float): Holding cost
+    
+    Returns:
+    float: Optimal order quantity Q*
+    """
+    return np.sqrt(2 * K * d / h)
+
+if __name__ == "__main__":
+    K = 500  # Order cost
+    d = 250  # Demand rate
+    h = 15   # Holding cost
+    
+    Q_star = eoq(K, d, h)
+    print(f"Optimal Order Quantity (Q*): {Q_star:.2f}")
+```
+
+### 用語
+
+| 英語                    | 日本語       |
+| ----------------------- | ------------ |
+| Economic Order Quantity | 経済的発注量 |
+| Deterministic           | 決定論的     |
+| Constant                | 一定         |
+| Demand Rate             | 需要率       |
+| Fixed Cost              | 固定費用     |
+| Cycle                   | サイクル     |
+| Inventory Level         | 在庫量       |
+| Order Quantity          | 発注量       |
+
+### 記号
+
+|  記号  | 説明                   |
+| :----: | :--------------------- |
+|  $d$   | 単位時間あたりの需要量 |
+|  $Q$   | 発注量                 |
+|  $K$   | 発注費用               |
+|  $h$   | 保管費用               |
+|  $c$   | 購入単価               |
+|  $T$   | サイクルの長さ         |
+| $g(Q)$ | 平均コスト             |
