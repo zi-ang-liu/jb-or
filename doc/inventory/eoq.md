@@ -191,19 +191,18 @@ plt.xlabel("Order Quantity (Q)", fontsize=14)
 plt.ylabel("Cost", fontsize=14)
 plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)
-plt.title("Cost Functions in EOQ Model", fontsize=16)
 plt.legend(fontsize=12)
 plt.tight_layout()
 plt.show()  
 :::
 
-平均コストが最小となる発注量 $Q^*$ は、発注コストと保管コストの交差点である。すなわち、発注コストと保管コストを等しくする発注量は最適な発注量 $Q^*$ である。$Q^*$ の増加に伴い、平均発注コストは減少し、平均保管コストは増加する。Vice versa. 
-
-この性質は以下の式からわかる。
+平均コストが最小となる発注量 $Q^*$ は、発注コストと保管コストの交差点である。すなわち、発注コストと保管コストを等しくする発注量は最適な発注量 $Q^*$ である。この性質は以下の式からわかる。
 
 $$
 \frac{Kd}{Q^*} = \frac{hQ^*}{2} \Longrightarrow Q^* = \sqrt{\frac{2Kd}{h}}
 $$
+
+$Q^*$ の増加に伴い、平均発注コストは減少し、平均保管コストは増加する。Vice versa. 
 
 ## 練習
 
