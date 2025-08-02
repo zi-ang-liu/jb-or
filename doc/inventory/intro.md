@@ -69,3 +69,8 @@ plt.show()
 
 欠品費用（stockout cost）
 : 需要が在庫を上回った場合に発生する費用。通常、単位あたりの欠品費用を $p$ とする。
+
+## Note
+
+- [在庫最適化と安全在庫配置システム MESSA (MEta Safety Stock Allocation system)](https://scmopt.github.io/manual/03inventory.html)
+- [Snyder (2023)](https://doi.org/10.1287/educ.2023.0256)はStockpylという在庫最適化とシミュレーションのためのPythonライブラリを開発した。
