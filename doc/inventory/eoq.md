@@ -123,11 +123,21 @@ $$
 g'(Q) = -\frac{Kd}{Q^2} + \frac{h}{2} = 0
 $$
 
-これを解くと、最適発注量 $Q^*$ は次のように表される。
+これを解くと、最適発注量
 
 $$
 Q^* = \sqrt{\frac{2Kd}{h}}
 $$
+
+を得る。これをEOQ公式（EOQ formula）と呼ぶ。$Q^*$ を経済的発注量と呼ぶ（経済的は最適という意味である）。
+
+:::{prf:observation}
+:label: observation:eoq
+
+1. $Q^*$ は $c$ には依存しない。
+2. $h$ の増加に伴い、$Q^*$ は減少する。保管費用が高い場合は、少量で高い頻度で発注することが望ましい。
+3. $K$ の増加に伴い、$Q^*$ は増加する。発注費用が高い場合は、多量で低い頻度で発注することが望ましい。
+:::
 
 二階導関数 $g''(Q)$ を求めて、最適発注量が最小値を与えることを確認する。
 
@@ -142,33 +152,6 @@ $Q^*$ を用いて、最適なサイクル期間 $T^*$ を求めることがで�
 $$
 T^* = \frac{Q^*}{d} = \sqrt{\frac{2K}{hd}}
 $$
-
-
-最適発注量 $Q^*$ を次の定理にまとめる。
-
-:::{prf:theorem} Economic Order Quantity
-:label: theorem:eoq
-
-EOQモデルにおいて、最適発注量 $Q^*$ は
-
-$$
-Q^* = \sqrt{\frac{2Kd}{h}}
-$$
-
-で与えられる。
-
-:::
-
-:::{prf:example}
-:label: example:eoq
-
-ある電気量販店では、毎月250台のPCが販売されている。発注費用は5000円、保管費用は1台あたり月150円、購入単価は10万円とする。このとき、最適発注量 $Q^*$ は次のように求められる。
-
-$$
-Q^* = \sqrt{\frac{2 \cdot 5000 \cdot 250}{150}}
-$$
-
-:::
 
 次の図は、発注コスト、保管コスト、平均コストの関係を示している。購入単価を $c = 0$ とする。
 
@@ -204,16 +187,39 @@ $$
 \frac{Kd}{Q^*} = \frac{hQ^*}{2} \Longrightarrow Q^* = \sqrt{\frac{2Kd}{h}}
 $$
 
-### 考察
+:::{prf:observation}
+:label: observation:eoq_cost
 
-1. $Q$ の増加に伴い、平均発注コストは減少し、平均保管コストは増加する。Vice versa. 
-2. $h$ の増加に伴い、$Q^*$ は減少する。保管費用が高い場合は、少量で高い頻度で発注することが望ましい。
-3. $K$ の増加に伴い、$Q^*$ は増加する。発注費用が高い場合は、多量で低い頻度で発注することが望ましい。
-4. $Q^*$ は $c$ には依存しない。
+$Q$ の増加に伴い、平均発注コストは減少し、平均保管コストは増加する。逆もまた然りである。
+:::
 
-### 実装
+最適発注量 $Q^*$ を次の定理にまとめる。
 
-```python
+:::{prf:theorem} Economic Order Quantity
+:label: theorem:eoq
+
+EOQモデルにおいて、最適発注量 $Q^*$ は
+
+$$
+Q^* = \sqrt{\frac{2Kd}{h}}
+$$
+
+で与えられる。
+
+:::
+
+:::{prf:example}
+:label: example:eoq
+
+ある電気量販店では、毎月250台のPCが販売されている。発注費用は5000円、保管費用は1台あたり月150円、購入単価は10万円とする。このとき、最適発注量 $Q^*$ は次のように求められる。
+
+$$
+Q^* = \sqrt{\frac{2 \cdot 5000 \cdot 250}{150}}
+$$
+
+最適発注量 $Q^*$ を次で計算する。
+
+```{code-cell} python
 def eoq(K, d, h):
     """
     Calculate the Economic Order Quantity (EOQ).
@@ -229,13 +235,16 @@ def eoq(K, d, h):
     return np.sqrt(2 * K * d / h)
 
 if __name__ == "__main__":
-    K = 500  # Order cost
-    d = 250  # Demand rate
-    h = 15   # Holding cost
+    K = 5000  # Order cost
+    d = 250   # Demand rate (units per month)
+    h = 150   # Holding cost (per unit per month)
     
     Q_star = eoq(K, d, h)
     print(f"Optimal Order Quantity (Q*): {Q_star:.2f}")
 ```
+:::
+
+
 
 ### 用語
 
@@ -263,4 +272,15 @@ if __name__ == "__main__":
 | $g(Q)$ | 平均コスト             |
 
 
-## 
+## バックオーダーを考慮したEOQモデル
+
+
+## 数量割引を考慮したEOQモデル
+
+- 数量割引（quantity discount）
+  - 総量割引（all-units discount）
+  - 増分割引（incremental discount）
+
+### 総量割引
+
+### 増分割引
