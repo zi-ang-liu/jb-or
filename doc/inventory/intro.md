@@ -27,6 +27,9 @@ import numpy as np
 バックオーダー（backorder）
 : バックオーダーが許容されるかどうか。
 
+計画期間（planning horizon）
+: 単一期間 (Single Period) か、複数期間 (Multi Period) か、無限 (Infinite) か。
+
 ## 在庫の費用
 
 在庫管理の目的は、在庫に関わる費用を最小化する（あるいは、利益を最大化する）ことである。ここでは、在庫に関わる費用を紹介する。
@@ -74,3 +77,5 @@ plt.show()
 
 - [在庫最適化と安全在庫配置システム MESSA (MEta Safety Stock Allocation system)](https://scmopt.github.io/manual/03inventory.html)
 - [Snyder (2023)](https://doi.org/10.1287/educ.2023.0256)はStockpylという在庫最適化とシミュレーションのためのPythonライブラリを開発した。
+
+https://orsj.org/wp-content/or-archives50/pdf/bul/Vol.30_11_673.pdf
