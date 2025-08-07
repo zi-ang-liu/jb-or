@@ -21,6 +21,7 @@ project:
         - file: doc/inventory/intro.md
         - file: doc/inventory/eoq.md
         - file: doc/inventory/wagner-whitin.md
+        - file: doc/inventory/safety.md
         - file: doc/inventory/newsvendor.md
     
 site:
