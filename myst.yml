@@ -23,7 +23,11 @@ project:
         - file: doc/inventory/wagner-whitin.md
         - file: doc/inventory/safety.md
         - file: doc/inventory/newsvendor.md
-    
+      
+    - title: Appendix
+      children:
+        - file: doc/appendix/calculus.md
+        - file: doc/appendix/probability.md
 site:
   template: book-theme
   # options:

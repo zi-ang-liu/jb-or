@@ -1,100 +1,146 @@
-# 安全在庫
+---
+kernelspec:
+  name: python3
+  display_name: 'Python 3'
+---
 
+# 確率的・連続観測在庫モデル
 
-:::{tip} 確率
+:::{code-cell} python
+:tags: [remove-input, remove-output]
+!pip install matplotlib numpy
+!pip install scipy
+import matplotlib.pyplot as plt
+import numpy as np
+import scipy.stats as stats
+:::
 
-離散型確率変数 $X$ が特定の値 $x$ をとる確率を
+これまで紹介した在庫モデルは、需要が決定論的であると仮定していた。ここからは、需要が確率的であると仮定した在庫モデルを紹介する。
 
-$$
-P(X = x) = p_X(x)
-$$
+## $(r, Q)$ 方策
 
-と表すとき、$p_X(x)$ を $X$ の**確率質量関数** (PMF) という。
+需要 $D$ がある確率分布に従うと仮定する。リードタイムを $L$ とし、既知の定数とする。在庫量が連続的に観測され、いつでも発注が可能であるとする**連続観測**の場合を考える。
 
-連続型確率変数 $X$ がある区間 $[a, b]$ にある値をとる確率を
+適切な在庫管理を行うために、以下の2つを決定する必要がある。
 
-$$
-P(a \leq X \leq b) = \int_a^b f_X(x) dx
-$$
+- いつ発注を行うか（発注のタイミング）
+- 発注量をどれくらいにするか（発注量）
 
-と表す。$f_X(x)$ を $X$ の**確率密度関数** (PDF) という。
+確率的・連続観測の在庫モデルでは、一般的に $(r, Q)$ 方策を採用する。ここで、$r$ は**発注点**（reorder point）と呼ばれ、在庫量が $r$ 以下になったときに発注を行う。$Q$ は**発注量**である。この方式は、**発注点法**とも呼ばれる。
 
-確率変数 $X$ の**累計分布関数**（CDF）は
+次の図は $(r, Q)$ 方策を用いた在庫量の変化を示している。需要が確率的である。
 
-$$
-F_X(x) = P(X \leq x) = \begin{cases}
-\sum_{k \leq x} p_X(k) & \text{if } X \text{ is discrete} \\
-\int_{-\infty}^x f_X(t) dt & \text{if } X \text{ is continuous}
-\end{cases}
-$$
-
-と表す。確率密度関数 $f_X(x)$ は累計分布関数 $F_X(x)$ の微分である。
-
-$$
-f_X(x) = \frac{d}{dx} F_X(x)
-$$
-
-連続型確率変数 $X$ は正規分布（normal distribution）に従うとき、$X \sim N(\mu, \sigma^2)$ と表す。ここで $\mu$ は平均、$\sigma^2$ は分散である。$X$ の確率密度関数は
-
-$$
-f_X(x) = \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{(x - \mu)^2}{2\sigma^2}}
-$$
-
-と表す。平均は $E[X] = \mu$、分散は $\text{Var}(X) = \sigma^2$ である。
-
-$X$ が $N(\mu, \sigma^2)$ に従うとき、$Y = aX + b$ は、$N(a\mu + b, a^2\sigma^2)$ に従う。特に、$Z = \frac{X - \mu}{\sigma}$ は標準正規分布（standard normal distribution）に従う。すなわち、$Z \sim N(0, 1)$ である。
-
-連続型確率変数 $Y$ が標準正規分布に従うとき、$Y$ の累計分布関数は
-
-$$
-\Phi(y) = P(Y \leq y) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^y e^{-\frac{t^2}{2}} dt
-$$
-
-と表す。**標準正規分布表**から、$y$ の値に対する $\Phi(y)$ を調べることができる。
-
-Python では、以下のように $\Phi(y)$ を計算できる。
-
-```python
-from scipy.stats import norm
-def phi(y):
-    return norm.cdf(y)
-
-phi(0)  # 0.5
-```
-
-また、$\Phi(y)=0.95$ のときの $y$ の値を求めるには、以下のようにする。
-
-```python
-from scipy.stats import norm
-def phi_inverse(p):
-    return norm.ppf(p)
-
-phi_inverse(0.95)  # 約1.64485
-```
-
-与えられた $X \sim N(\mu, \sigma^2)$ の累計分布関数 $F_X(x)$ の値を求めるには、以下のように変換する。
-
-$$
-\begin{align*}
-P(X \leq x) 
-&= P \left( \frac{X - \mu}{\sigma} \leq \frac{x - \mu}{\sigma} \right) \\\\
-&= P\left( Y \leq \frac{x - \mu}{\sigma} \right) \\\\
-&= \Phi \left( \frac{x - \mu}{\sigma} \right)
-\end{align*}
-$$
-
-正規分布は再生性（reproductive property）を持つ。すなわち、$X_1, X_2, \ldots, X_n$ が独立に $N(\mu_i, \sigma_i^2)$ に従うとき、$Y = \sum_{i=1}^n a_i X_i$ は $N\left(\sum_{i=1}^n a_i \mu_i, \sum_{i=1}^n a_i^2 \sigma_i^2\right)$ に従う。
+:::{code-cell} python
+:tags: [remove-input]
 
 :::
 
-単位期間あたりの需要が連続型確率変数 $D$ であり、$D \sim N(\mu, \sigma^2)$ とする。ここで、$\mu$ は平均需要、$\sigma^2$ は需要の分散である。リードタイム を $L$ とし、既知の定数とする。
+$r$ と $Q$ を決定変数とし、在庫の**期待コスト**（expected cost）を最小化することを目的とする。
 
-リードタイムの間に発生する需要は $D_L \sim N(\mu_L, \sigma_L^2)$ とする。ここで、正規分布の再生性により、
+## 問題設定
+
+単位期間あたりの需要を $D$ とし、$D$ は正規分布 $N(\mu, \sigma^2)$ に従うと仮定する。ここで、$\mu$ は平均需要、$\sigma$ は需要の標準偏差である。
+
+リードタイムを $L$ とし、既知の定数とする。発注費用を $K$、単位あたりの保管費用を $h$ とする。
+
+:::{note}
+この問題の定式化および厳密解法は、ここでは説明しない。[Snyder & Shen (2019)](https://doi.org/10.1002/9781119584445) の「Fundamentals of Supply Chain Theory」などの文献を参照されたい。
+以下は $(r, Q)$ の近似解法を紹介する。
+:::
+
+### 発注点 $r$ 
+
+発注点 $r$ を決めるためには、**サービスレベル**（service level）を考える。ここでは、サービスレベルを、リードタイム期間中に需要を満たす確率と定義する。サービスレベルを $\alpha$ とし、$0 < \alpha < 1$ とする。
+
+リードタイム期間中の需要を確率変数 $D_L$ とし、$D_L \leq r$ の確率が $\alpha$ になるように発注点 $r$ を決定する。すなわち、
+
+$$
+P(D_L \leq r) = \alpha
+$$
+
+により、発注点 $r$ を求める。
+
+リードタイム期間中に発生する需要は $D_L \sim N(\mu_L, \sigma_L^2)$ とし、正規分布の再生性により、
 
 $$
 \mu_L = \mu L, \quad \sigma_L^2 = \sigma^2 L
 $$
 
-になる。
+になる。すなわち、リードタイム期間中の平均需要は $\mu_L = \mu L$、標準偏差は $\sigma_L = \sigma \sqrt{L}$ である。
 
-$(r, Q)$
+$D_L$ は確率変数であるため、発注点 $r$ は平均需要と安全在庫 $s$ の和として表される。
+
+$$
+r = \mu_L + s
+$$
+
+従って、
+
+$$
+P(D_L \leq r) = P(D_L \leq \mu_L + s) = \alpha
+$$
+となる。この式を変形すると、
+
+$$
+\begin{align*}
+P(D_L - \mu_L \leq s) &= \alpha \\
+P\left(\frac{D_L - \mu_L}{\sigma_L} \leq \frac{s}{\sigma_L}\right) &= \alpha \\
+\Phi\left(\frac{s}{\sigma_L}\right) &= \alpha \\
+\frac{s}{\sigma_L} &= \Phi^{-1}(\alpha) \\
+s &= \sigma_L \Phi^{-1}(\alpha) \\
+s &= \sigma \sqrt{L} \Phi^{-1}(\alpha)
+\end{align*}
+$$
+
+ここで、$\Phi(\cdot)$ は標準正規分布の累計分布関数であり、$\Phi^{-1}(\alpha)$ はその逆関数である。したがって、発注点 $r$ は次のように表される。
+
+$$
+r = \mu_L + s = \mu L + \sigma \sqrt{L} \Phi^{-1}(\alpha)
+$$
+
+$\Phi^{-1}(\alpha)$ は標準正規分布表、Excel、Python などを用いて求めることができる。
+
+:::{prf:example}
+:label: example:safety_stock
+リードタイム $L = 4$、平均需要 $\mu = 100$、需要の標準偏差 $\sigma = 20$、サービスレベル $\alpha = 0.95$ のとき、発注点 $r$ と安全在庫 $s$ を求める。
+
+リードタイム期間中の平均需要と標準偏差は次のように計算される。
+
+$$
+\begin{align*}
+\mu_L &= \mu L = 100 \cdot 4 = 400 \\
+\sigma_L &= \sigma \sqrt{L} = 20 \sqrt{4} = 40 \\
+\end{align*}
+$$
+
+標準正規分布表から $\Phi^{-1}(0.95) \approx 1.64485$ を得る。これを用いて安全在庫 $s$ と発注点 $r$ を求める。
+
+$$
+\begin{align*}
+s &= \sigma_L \Phi^{-1}(0.95) \approx 40 \cdot 1.64485 \approx 65.79 \\
+r &= \mu_L + s \approx 400 + 65.79 \approx 465.79
+\end{align*}
+$$
+
+したがって、発注点 $r$ は約465.79、必要な安全在庫 $s$ は約65.79となる。
+
+Python では、以下のように計算できる。
+
+:::{code-cell} python
+from scipy.stats import norm
+
+L = 4
+mu = 100
+sigma = 20
+alpha = 0.95
+
+mu_L = mu * L
+sigma_L = sigma * (L ** 0.5)
+
+s = sigma_L * norm.ppf(alpha)
+r = mu_L + s
+
+print(f"reorder point: {r:.2f},  safety stock: {s:.2f}")
+:::
+
+### 発注量 $Q$
