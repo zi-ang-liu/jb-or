@@ -1,4 +1,6 @@
 ---
+bibliography:
+  - references.bib
 kernelspec:
   name: python3
   display_name: 'Python 3'
@@ -17,48 +19,51 @@ import scipy.stats as stats
 
 これまで紹介した在庫モデルは、需要が決定論的であると仮定していた。ここからは、需要が確率的であると仮定した在庫モデルを紹介する。
 
-## $(r, Q)$ 方策
+## 在庫方策
 
-需要 $D$ がある確率分布に従うと仮定する。リードタイムを $L$ とし、既知の定数とする。在庫量が連続的に観測され、いつでも発注が可能であるとする**連続観測**の場合を考える。
+確率的在庫モデルにおいて、一つ重要な概念は**在庫方策**（inventory policy）である。在庫方策は、在庫の状況に応じて、在庫管理のルールを定めるものである。代表的な在庫方策を以下に示す。
 
-適切な在庫管理を行うために、以下の2つを決定する必要がある。
+1. $(r, Q)$ 方策：在庫量を連続的に観測し、在庫量が発注点 $r$ 以下になったときに発注量 $Q$ を発注する方式である。**発注点方式**とも呼ばれる。
+2. BSP 方策（Base Stock Policy）：在庫量を定期的に観測し、在庫量が基準在庫 $S$ 以下になったときに、在庫量を $S$ まで補充する方式である。**定期発注方式**とも呼ばれる。
+3. $(s, S)$ 方策：在庫量を定期的に観測し、在庫量が発注点 $s$ 以下になったときに、在庫量を補充点 $S$ まで補充する方式である。
 
-- いつ発注を行うか（発注のタイミング）
-- 発注量をどれくらいにするか（発注量）
-
-確率的・連続観測の在庫モデルでは、一般的に $(r, Q)$ 方策を採用する。ここで、$r$ は**発注点**（reorder point）と呼ばれ、在庫量が $r$ 以下になったときに発注を行う。$Q$ は**発注量**である。この方式は、**発注点法**とも呼ばれる。
-
-次の図は $(r, Q)$ 方策を用いた在庫量の変化を示している。需要が確率的である。
-
-:::{code-cell} python
-:tags: [remove-input]
-
-:::
-
-$r$ と $Q$ を決定変数とし、在庫の**期待コスト**（expected cost）を最小化することを目的とする。
+一部の確率的在庫モデルにに対し、これらの在庫方策は**最適**であることが知られている。その場合、在庫方策が持つパラメータを最適化することで、在庫の期待コストを最小化することができる。
 
 ## 問題設定
 
-単位期間あたりの需要を $D$ とし、$D$ は正規分布 $N(\mu, \sigma^2)$ に従うと仮定する。ここで、$\mu$ は平均需要、$\sigma$ は需要の標準偏差である。
+需要 $D$ がある確率分布に従うと仮定する。リードタイムを $L$ とし、既知の定数とする。発注費用を $K$、単位あたりの保管費用を $h$ とする。在庫量が連続的に観測され、いつでも発注が可能であるとする**連続観測**の場合を考える。
 
-リードタイムを $L$ とし、既知の定数とする。発注費用を $K$、単位あたりの保管費用を $h$ とする。
+$(r, Q)$ 方策が用いられるとする。在庫量が発注点 $r$ 以下になったときに、発注量 $Q$ を発注する。この場合、発注点 $r$ と発注量 $Q$ を決定変数とし、在庫の**期待コスト**（expected cost）を最小化することを目的とする。
 
 :::{note}
 この問題の定式化および厳密解法は、ここでは説明しない。[Snyder & Shen (2019)](https://doi.org/10.1002/9781119584445) の「Fundamentals of Supply Chain Theory」などの文献を参照されたい。
 以下は $(r, Q)$ の近似解法を紹介する。
 :::
 
+## 近似解法
+
+以下では、単位期間あたりの需要を $D$ とし、$D$ は正規分布 $N(\mu, \sigma^2)$ に従うと仮定する。ここで、$\mu$ は平均需要、$\sigma$ は需要の標準偏差である。
+
+### 発注量 $Q$
+
+$D$ の平均 $\mu$ をEOQモデルの需要率とみなすと、発注量 $Q$ は次のように求めることができる[@Camm2022-zv]。
+
+$$
+Q = \sqrt{\frac{2K \mu}{h}}
+$$
+
+また、欠品費用も考慮する場合、バックオーダーを考慮した EOQ モデルを用いて、発注量 $Q$ は次のように求めることができる[@Hillier2025-cb]。
+
+$$
+Q = \sqrt{\frac{2K \mu}{h}} \sqrt{\frac{p+h}{p}}
+$$
+$p$ は単位あたりの欠品費用である。
+
+得られた発注量 $Q$ は、最適解ではなく、近似解であることに注意されたい。
+
 ### 発注点 $r$ 
 
-発注点 $r$ を決めるためには、**サービスレベル**（service level）を考える。ここでは、サービスレベルを、リードタイム期間中に需要を満たす確率と定義する。サービスレベルを $\alpha$ とし、$0 < \alpha < 1$ とする。
 
-リードタイム期間中の需要を確率変数 $D_L$ とし、$D_L \leq r$ の確率が $\alpha$ になるように発注点 $r$ を決定する。すなわち、
-
-$$
-P(D_L \leq r) = \alpha
-$$
-
-により、発注点 $r$ を求める。
 
 リードタイム期間中に発生する需要は $D_L \sim N(\mu_L, \sigma_L^2)$ とし、正規分布の再生性により、
 
@@ -68,18 +73,86 @@ $$
 
 になる。すなわち、リードタイム期間中の平均需要は $\mu_L = \mu L$、標準偏差は $\sigma_L = \sigma \sqrt{L}$ である。
 
-$D_L$ は確率変数であるため、発注点 $r$ は平均需要と安全在庫 $s$ の和として表される。
+発注点 $r$ を決めるためには、**サービスレベル**（service level）を考える。ここでは、サービスレベルを、リードタイム期間中に需要を満たす確率と定義する。サービスレベルを $\alpha$ とし、$0 < \alpha < 1$ とする。
+
+与えられたサービスレベル $\alpha$ に対して、$D_L$ が発注点 $r$ 以下になる確率（欠品が発生しない確率、つまり、サービスレベル）が $\alpha$ になるように発注点 $r$ を決定する。
+
+$$
+P(D_L \leq r) = \alpha
+$$
+
+もし、発注点 $r = \mu_L$ とすると、$P(D_L \leq \mu_L) = 0.5$ となる。すなわち、50% の確率で欠品が発生することになる。
+
+:::{note}
+
+$$
+P(D_L \leq \mu_L) = P\left(\frac{D_L - \mu_L}{\sigma_L} \leq 0\right) = \Phi(0) = 0.5
+$$
+:::
+
+したがって、サービスレベル $\alpha > 0.5$ の場合、発注点 $r$ は平均需要 $\mu_L$ より大きくなる必要がある。それを**安全在庫**（safety stock）と呼び、$s$ と表す。
+
+:::{prf:example}
+:label: example:safety_stock
+
+単位期間あたりの需要 $D$ が連続一様分布 $U(200, 300)$ に従うと仮定する。平均需要は $\mu = 250$ である。一回の発注量を $Q = 500$ とする。次の図は、在庫量の時間的変化を示す。灰色の領域は、需要の範囲を示す。赤い領域は、在庫量が0以下になったときの欠品を示す。黒い線は平均需要に基づく在庫量の変化を示す。
+
+:::{code-cell} python
+:tags: [remove-input]
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Parameters
+d_mean = 250  # Mean demand rate
+d_max = 300   # Max demand rate
+d_min = 200   # Min demand rate
+Q = 500       # Order quantity
+T = Q / d_mean  # Average cycle length
+
+# Simulate over multiple cycles to show repeated pattern
+n_cycles = 1
+t = np.linspace(0, n_cycles * T, 1000)
+
+# Inventory levels: linear depletion over time
+inventory_mean = Q - d_mean * (t % T)
+inventory_mean[0] = 0
+inventory_max = Q - d_max * (t % T)
+inventory_min = Q - d_min * (t % T)
+
+# Plotting
+plt.figure(figsize=(12, 6))
+plt.plot(t, inventory_mean, label="Mean Demand", color="black", linewidth=2)
+plt.fill_between(t, inventory_min, inventory_max, color="gray", alpha=0.5, label="Demand Range")
+
+# Highlight when inventory drops below 0 (shortage)
+plt.fill_between(t, inventory_max, 0, where=(inventory_max < 0), color="red", alpha=0.3, label="Shortage")
+
+# Aesthetics
+plt.axhline(0, color="gray", linewidth=1)
+plt.xlabel("Time", fontsize=14)
+plt.ylabel("Inventory Level", fontsize=14)
+plt.title("Inventory Level Over Time with Uniform Demand Distribution", fontsize=16)
+plt.legend(fontsize=12)
+plt.xticks(fontsize=12)
+plt.yticks(fontsize=12)
+plt.tight_layout()
+plt.show()
+
+:::
+
+よって、発注点 $r$ は次のように表される。
 
 $$
 r = \mu_L + s
 $$
 
-従って、
+従って、$P(D_L \leq r) = \alpha$ は次のように表される。
 
 $$
-P(D_L \leq r) = P(D_L \leq \mu_L + s) = \alpha
+P(D_L \leq \mu_L + s) = \alpha
 $$
-となる。この式を変形すると、
+
+この式を変形すると、
 
 $$
 \begin{align*}
@@ -101,7 +174,7 @@ $$
 $\Phi^{-1}(\alpha)$ は標準正規分布表、Excel、Python などを用いて求めることができる。
 
 :::{prf:example}
-:label: example:safety_stock
+:label: example:safety_stock_calculation
 リードタイム $L = 4$、平均需要 $\mu = 100$、需要の標準偏差 $\sigma = 20$、サービスレベル $\alpha = 0.95$ のとき、発注点 $r$ と安全在庫 $s$ を求める。
 
 リードタイム期間中の平均需要と標準偏差は次のように計算される。
@@ -143,4 +216,3 @@ r = mu_L + s
 print(f"reorder point: {r:.2f},  safety stock: {s:.2f}")
 :::
 
-### 発注量 $Q$

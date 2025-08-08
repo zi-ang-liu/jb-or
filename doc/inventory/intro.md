@@ -79,3 +79,29 @@ plt.show()
 - [Snyder (2023)](https://doi.org/10.1287/educ.2023.0256)はStockpylという在庫最適化とシミュレーションのためのPythonライブラリを開発した。
 
 https://orsj.org/wp-content/or-archives50/pdf/bul/Vol.30_11_673.pdf
+
+
+### 用語
+
+| 英語                    | 日本語       |
+| ----------------------- | ------------ |
+| Economic Order Quantity | 経済的発注量 |
+| Deterministic           | 決定論的     |
+| Constant                | 一定         |
+| Demand Rate             | 需要率       |
+| Fixed Cost              | 固定費用     |
+| Cycle                   | サイクル     |
+| Inventory Level         | 在庫量       |
+| Order Quantity          | 発注量       |
+
+### 記号
+
+|  記号  | 説明                   |
+| :----: | :--------------------- |
+|  $d$   | 単位時間あたりの需要量 |
+|  $Q$   | 発注量                 |
+|  $K$   | 発注費用               |
+|  $h$   | 保管費用               |
+|  $c$   | 購入単価               |
+|  $T$   | サイクル期間           |
+| $g(Q)$ | 平均コスト             |
