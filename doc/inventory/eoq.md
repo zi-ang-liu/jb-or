@@ -4,7 +4,7 @@ kernelspec:
   display_name: 'Python 3'
 ---
 
-# 決定論的・連続観測在庫モデル
+# 経済的発注量
 
 :::{code-cell} python
 :tags: [remove-input, remove-output]
@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 :::
 
-## 経済的発注量
+
 
 **経済的発注量**（EOQ: Economic Order Quantity）モデルは、最も基本的な在庫管理モデルの一つである。[Harris](https://doi.org/10.1287/opre.38.6.947)は1913年、このモデルを最初に提案した。
 

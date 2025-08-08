@@ -6,7 +6,7 @@ kernelspec:
   display_name: 'Python 3'
 ---
 
-# 確率的・連続観測在庫モデル
+# 安全在庫
 
 :::{code-cell} python
 :tags: [remove-input, remove-output]
