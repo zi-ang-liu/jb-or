@@ -44,3 +44,28 @@ $$
 $$
 g(S, d) = cS - rd + (h - v) (S - d)^+ + (p + r) (d - S)^+
 $$
+
+$D$ が確率変数であるため、新聞売り子問題はコストの期待値を最小化する問題に帰着される。
+
+$$
+\begin{align*}
+g(S) &= \mathbb{E}[g(S, D)] \\
+&= cS - r\mathbb{E}[D] + (h - v) \mathbb{E}[(S - D)^+] + (p + r) \mathbb{E}[(D - S)^+] \\
+&= cS - r\int_{-\infty}^{\infty} d f_D(d) + (h - v) \int_{-\infty}^{S} (S - d) f_D(d) dd + (p + r) \int_{S}^{\infty} (d - S) f_D(d) dd
+\end{align*}
+$$
+
+$$
+\begin{align*}
+\frac{dg(S)}{dS} &= c + (h - v) \int_{-\infty}^{S} f_D(d) dd - (p + r) \int_{S}^{\infty} f_D(d) dd \\
+&= c + (h - v) F_D(S) - (p + r) (1 - F_D(S))
+\end{align*}
+$$
+
+$$
+\begin{align*}
+\frac{dg(S)}{dS} &= 0 \\
+c + (h - v) F_D(S) - (p + r) (1 - F_D(S)) &= 0\\
+F_D(S) &= \frac{p + r - c}{h + p + r - v}
+\end{align*}
+$$
