@@ -58,7 +58,7 @@ $$
 \begin{align*}
 g(S) &= \mathbb{E}[g(S, D)] \\
 &= cS - r\mathbb{E}[D] + (h - v) \mathbb{E}[(S - D)^+] + (p + r) \mathbb{E}[(D - S)^+] \\
-&= cS - r\int_{-\infty}^{\infty} d f_D(d) + (h - v) \int_{-\infty}^{S} (S - d) f_D(d) dd + (p + r) \int_{S}^{\infty} (d - S) f_D(d) dd
+&= c S - r \mu + (h - v) \int_{0}^{S} (S - d) f_D(d) dd + (p + r) \int_{S}^{\infty} (d - S) f_D(d) dd
 \end{align*}
 $$
 
@@ -68,16 +68,15 @@ $g(S)$ の1階微分は以下のように求める。
 
 $$
 \begin{align*}
-\frac{dg(S)}{dS} &= c + (h - v) \int_{-\infty}^{S} f_D(d) dd - (p + r) \int_{S}^{\infty} f_D(d) dd \\
-&= c + (h - v) F_D(S) - (p + r) (1 - F_D(S))
+\frac{dg(S)}{dS} &= c + (h - v) F_D(S) - (p + r) (1 - F_D(S)) \\
 \end{align*}
 $$
 
-これを 0 とおくと、
+よって、$dg(S)/dS = 0$ から、
 
 $$
 \begin{align*}
-0 &= c + (h - v) F_D(S) - (p + r) (1 - F_D(S)) \\
+c + (h - v) F_D(S) - (p + r) (1 - F_D(S)) &= 0 \\
 F_D(S) &= \frac{p + r - c}{h + p + r - v}
 \end{align*}
 $$
