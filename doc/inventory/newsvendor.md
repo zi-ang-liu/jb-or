@@ -57,7 +57,9 @@ $D$ が確率変数であるため、コストの期待値 $g(S)$ は以下の�
 $$
 \begin{align*}
 g(S) &= \mathbb{E}[g(S, D)] \\
+&= \int_{0}^{\infty} g(S, d) f_D(d) dd \\
 &= cS - r\mathbb{E}[D] + (h - v) \mathbb{E}[(S - D)^+] + (p + r) \mathbb{E}[(D - S)^+] \\
+&= c S - r \mu + (h - v)  \int_{0}^{\infty}(S - d)^+ f_D(d) dd + (p + r) \int_{0}^{\infty} (d - S)^+ f_D(d) dd \\
 &= c S - r \mu + (h - v) \int_{0}^{S} (S - d) f_D(d) dd + (p + r) \int_{S}^{\infty} (d - S) f_D(d) dd
 \end{align*}
 $$
@@ -81,16 +83,16 @@ F_D(S) &= \frac{p + r - c}{h + p + r - v}
 \end{align*}
 $$
 
-になる。2 階微分は以下のように求める。
+になる。2 階微分は
 
 $$
 \begin{align*}
 \frac{d^2g(S)}{dS^2} &= (h - v) f_D(S) + (p + r) f_D(S) \\
-&= (h - v + p + r) f_D(S)
+&= (h - v + p + r) f_D(S) 
 \end{align*}
 $$
 
-$r > v$ であるため、$h - v + p + r > 0$ となる。したがって、2 階微分は常に正である。つまり、コスト関数 $g(S)$ は凸関数であり、1 階微分が 0 になる点は最小値を与える。
+である。したがって、コスト関数 $g(S)$ は凸関数であり、1 階微分が 0 になる点は最小値を与える。
 
 コスト関数 $g(S)$ を最小化するための最適発注量 $S^*$ は以下のように表される。
 
@@ -99,6 +101,8 @@ S^* = F_D^{-1}\left(\frac{p + r - c}{h + p + r - v}\right)
 $$
 
 ここで、$F_D^{-1}$ は需要 $D$ の累積分布関数の逆関数である。
+
+## 臨界率
 
 新聞売り子問題において、より一般的に、在庫超過費用（overage cost）と 在庫不足費用（underage cost）を考慮する。
 
