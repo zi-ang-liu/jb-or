@@ -29,6 +29,9 @@ project:
         - file: doc/inventory/wagner-whitin.md
         - file: doc/inventory/safety.md
         - file: doc/inventory/newsvendor.md
+    - title: 多基準意思決定分析
+      children:
+        - file: doc/mcda/ahp.md
     - title: 待ち行列
       children:
         - file: doc/queue/intro.md
