@@ -1,4 +1,7 @@
-# オペレーションズ・リサーチ
+---
+title: オペレーションズ・リサーチ
+subtitle: Models, Algorithms, and Implementation
+---
 
 ## 講義情報
 
