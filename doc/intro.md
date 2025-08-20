@@ -1,6 +1,6 @@
 ---
 title: オペレーションズ・リサーチ
-subtitle: Models, Algorithms, and Implementation
+subtitle: Operations Research (Models, Algorithms, and Implementation)
 ---
 
 ## 講義情報
