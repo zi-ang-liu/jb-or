@@ -1,4 +1,5 @@
 ---
+title: 在庫管理とは
 kernelspec:
   name: python3
   display_name: 'Python 3'
@@ -11,22 +12,22 @@ import matplotlib.pyplot as plt
 import numpy as np
 :::
 
-# 在庫管理とは
-
 
 商店・工場・倉庫などで、原材料・部品・製品などを適切に管理することを**在庫管理**（Inventory Management）という。一般的に、在庫管理の目的は、顧客の需要を満たしつつ、在庫に関わる費用を最小化することである。
 
-在庫が多すぎると、保管費用がかかる。逆に、在庫が少なすぎると、欠品が発生し、顧客の需要を満たせなくなる。在庫量を適切に保つためには、次の二つの問題に答える必要がある。
+在庫が多すぎると、保管費用がかかる。逆に、在庫が少なすぎると、欠品が発生し、顧客の需要を満たせなくなる。在庫管理は次の二つの問題を決定する。
 
 1. どのくらいの量を発注するか？（発注量）
 2. いつ発注するか？（発注時期）
 
-科学的在庫管理（Scientific Inventory Management）では、次の手順で在庫管理を行う。
+科学的在庫管理（Scientific Inventory Management）では、これらの問題に答えるために、次の手順で在庫管理を行う。
 
 1. 在庫システムを数学モデルとして定式化する。
 2. 最適な発注量と発注時期を決定する。
 
 ## 在庫モデルの分類
+
+在庫モデルは、次のような要素で分類される。
 
 需要（demand）
 : 需要が**決定論的** (Deterministic) か**確率的** (Stochastic) か。
@@ -131,7 +132,7 @@ plt.show()
 $$
 \frac{2 \times 500}{2} \times 3 \times h
 $$
-
+<!-- 
 ## Note
 
 - [在庫最適化と安全在庫配置システム MESSA (MEta Safety Stock Allocation system)](https://scmopt.github.io/manual/03inventory.html)
@@ -163,4 +164,4 @@ https://orsj.org/wp-content/or-archives50/pdf/bul/Vol.30_11_673.pdf
 |  $h$   | 保管費用               |
 |  $c$   | 購入単価               |
 |  $T$   | サイクル期間           |
-| $g(Q)$ | 平均コスト             |
+| $g(Q)$ | 平均コスト             | -->

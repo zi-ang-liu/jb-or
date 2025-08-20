@@ -2,9 +2,6 @@
 
 新聞売り子問題（Newsvendor Problem）は、古典的な確率的在庫モデルの一つである。
 
-[Arrow et al. (1951)](https://doi.org/10.2307/1906813)
-[Chen et al. (2016)](https://doi.org/10.1111/deci.12215) は新聞売り子問題の最新研究をレビューしている。最近では、データ駆動新聞売り子問題（Data-Driven Newsvendor Problem）に関する研究が行われている。
-
 新聞売り子が毎日新聞を仕入れ、販売する問題を考える。新聞 1 部の仕入れ価格を $c$、販売価格を $r$、残存価額を $v$、欠品費用を $p$、保管費用を $h$ とする。
 
 - $r > c$. 販売価格は仕入れ価格より高い。
@@ -176,3 +173,7 @@ critical_ratio = C_u / (C_o + C_u)
 S_star = norm.ppf(critical_ratio, loc=mu, scale=sigma)
 ```
 :::
+
+
+<!-- [Arrow et al. (1951)](https://doi.org/10.2307/1906813)
+[Chen et al. (2016)](https://doi.org/10.1111/deci.12215) は新聞売り子問題の最新研究をレビューしている。最近では、データ駆動新聞売り子問題（Data-Driven Newsvendor Problem）に関する研究が行われている。 -->

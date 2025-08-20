@@ -267,15 +267,9 @@ $$
 PCの在庫量が63台になったときに発注を行う。
 :::
 
-## バックオーダーを考慮したEOQモデル
+## 他のEOQモデル
 
-
-## 数量割引を考慮したEOQモデル
-
-- 数量割引（quantity discount）
+- バックオーダーを考慮したEOQモデル
+- 数量割引（quantity discount）を考慮したEOQモデル
   - 総量割引（all-units discount）
   - 増分割引（incremental discount）
-
-### 総量割引
-
-### 増分割引
