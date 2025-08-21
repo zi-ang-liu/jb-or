@@ -1,38 +1,48 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import networkx as nx
+from networkx.drawing.nx_pydot import graphviz_layout 
 
-# Parameters
-d_mean = 250  # Mean demand rate
-d_max = 300   # Max demand rate
-d_min = 200   # Min demand rate
-Q = 500       # Order quantity
-T = Q / d_mean  # Average cycle length
+# Define the tasks
+tasks = {
+    "A": {"name": "課題の理解", "predecessors": [], "duration": 2},
+    "B": {"name": "データ収集", "predecessors": ["A"], "duration": 3},
+    "C": {"name": "データ分析", "predecessors": ["B"], "duration": 4},
+    "D": {"name": "文献調査", "predecessors": ["A"], "duration": 2},
+    "E": {"name": "レポート作成", "predecessors": ["C", "D"], "duration": 5},
+}
 
-# Simulate over multiple cycles to show repeated pattern
-n_cycles = 1
-t = np.linspace(0, n_cycles * T, 1000)
+# Create a directed graph
+G = nx.DiGraph()
 
-# Inventory levels: linear depletion over time
-inventory_mean = Q - d_mean * (t % T)
-inventory_mean[0] = 0
-inventory_max = Q - d_max * (t % T)
-inventory_min = Q - d_min * (t % T)
+# Add tasks
+for task_id, task in tasks.items():
+    G.add_node(task_id, label=f"{task_id}: {task['name']}\n({task['duration']}日)")
 
-# Plotting
-plt.figure(figsize=(12, 6))
-plt.plot(t, inventory_mean, label="Mean Demand", color="black", linewidth=2)
-plt.fill_between(t, inventory_min, inventory_max, color="gray", alpha=0.5, label="Demand Range")
+# Add Start and Finish nodes
+G.add_node("Start", label="Start")
+G.add_node("Finish", label="Finish")
 
-# Highlight when inventory drops below 0 (shortage)
-plt.fill_between(t, inventory_max, 0, where=(inventory_max < 0), color="red", alpha=0.3, label="Shortage")
+# Add edges for precedence
+for task_id, task in tasks.items():
+    if not task["predecessors"]:  # no predecessors → connect from Start
+        G.add_edge("Start", task_id)
+    else:
+        for pred in task["predecessors"]:
+            G.add_edge(pred, task_id)
 
-# Aesthetics
-plt.axhline(0, color="gray", linewidth=1)
-plt.xlabel("Time", fontsize=14)
-plt.ylabel("Inventory Level", fontsize=14)
-plt.title("Inventory Level Over Time with Uniform Demand Distribution", fontsize=16)
-plt.legend(fontsize=12)
-plt.xticks(fontsize=12)
-plt.yticks(fontsize=12)
-plt.tight_layout()
+# Add Finish connections (tasks with no successors → to Finish)
+for task_id in tasks:
+    if G.out_degree(task_id) == 0:  # no outgoing edges
+        G.add_edge(task_id, "Finish")
+
+# Graphviz layout (top-to-bottom)
+pos = graphviz_layout(G, prog="dot")
+
+# Draw the graph
+plt.figure(figsize=(10, 6))
+nx.draw(G, pos, with_labels=False, node_size=2500, node_color="lightyellow", edgecolors="black", arrows=True, arrowsize=20)
+nx.draw_networkx_labels(G, pos, labels=nx.get_node_attributes(G, "label"), font_size=10)
+
+plt.title("Project Network Diagram (PERT/CPM style)")
+plt.axis("off")
 plt.show()
