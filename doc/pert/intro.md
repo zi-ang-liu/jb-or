@@ -10,9 +10,10 @@ kernelspec:
 :::{code-cell} python
 :tags: [remove-input, remove-output]
 !pip install matplotlib numpy networkx
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
 import networkx as nx
+from networkx.drawing.nx_pydot import graphviz_layout 
 :::
 
 - Camm et al. (2022) Chapter 9
@@ -51,9 +52,6 @@ AOA では、作業を辺で表現し、先行関係をノードで表現する�
 
 :::{code-cell} python
 :tags: [remove-input]
-import matplotlib.pyplot as plt
-import networkx as nx
-from networkx.drawing.nx_pydot import graphviz_layout 
 
 # Define the tasks
 tasks = {
@@ -92,13 +90,14 @@ for task_id in tasks:
 pos = graphviz_layout(G, prog="dot")
 
 # Draw the graph
-plt.figure(figsize=(10, 6))
-nx.draw(G, pos, with_labels=False, node_size=2500, node_color="lightyellow", edgecolors="black", arrows=True, arrowsize=20)
+plt.figure(figsize=(3, 5))
+nx.draw(G, pos, with_labels=False, node_size=1000, node_color="lightyellow", edgecolors="black", arrows=True, arrowsize=20)
 nx.draw_networkx_labels(G, pos, labels=nx.get_node_attributes(G, "label"), font_size=10)
 
 plt.title("Project Network Diagram")
 plt.axis("off")
 plt.show()
+
 :::
 
 
