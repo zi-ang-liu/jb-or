@@ -35,6 +35,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18.x
+      - name: Install Graphviz
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y graphviz graphviz-dev
       - name: Install Jupyter Book (via myst)
         run: pip install "jupyter-book>=2.0.0a0"
       - name: Build HTML Assets
