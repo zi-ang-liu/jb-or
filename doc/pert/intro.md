@@ -32,6 +32,8 @@ from networkx.drawing.nx_pydot import graphviz_layout
 - 先行関係（Precedence Relationship）：それぞれの作業の先行作業を定義する関係。
 - 作業時間：各作業に必要な時間。通常、確率変数として与えられる。
 
+## プロジェクト・ネットワーク
+
 プロジェクトを表現するネットワークを**プロジェクト・ネットワーク**（Project Network）と呼ぶ。プロジェクト・ネットワークには、**AOA**（Activity on Arrow）や **AON**（Activity on Node）という 2 種類の表現方法がある。
 
 AOA では、作業を辺で表現し、先行関係をノードで表現する。AON では、作業を頂点（node）で表現し、先行関係は辺（edge）で表現する。日本の教科書では AOA が一般的であるが、AON のほうが理解と作成が容易であるため、海外の教科書では AON が一般的で、実務でも AON がよく使われる[@Camm2022-zv; @Hillier2025-cb; @Eiselt2022-qy]。これ以降の説明では、AON を用いる。
@@ -101,4 +103,5 @@ plt.show()
 :::
 
 
+## クリティカルパス
 
