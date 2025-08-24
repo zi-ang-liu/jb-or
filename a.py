@@ -7,9 +7,7 @@ class ProjectNetwork:
     def _create_graph(self):
         # Add tasks
         for task_id, task in self.tasks.items():
-            self.G.add_node(
-                task_id, label=f"{task_id}\n({task['duration']})"
-            )
+            self.G.add_node(task_id, label=f"{task_id}\n({task['duration']})")
 
         # Add Start and Finish nodes
         self.G.add_node("Start", label="Start")
@@ -52,6 +50,7 @@ class ProjectNetwork:
         plt.axis("off")
         plt.show()
 
+
 tasks = {
     "A": {"name": "課題の理解", "predecessors": [], "duration": 2},
     "B": {"name": "データ収集", "predecessors": ["A"], "duration": 3},
@@ -81,6 +80,21 @@ project_network.draw()
 # | N    | K, L     | 6          |
 
 tasks = {
-    "A": {"name": " ", "predecessors": [], "duration": 2},
-    "B": {"name": " ", "predecessors": [], "duration": 4},
-    "C": {"name": "", "predecessors": ["A", "B"]
+    "A": {"name": "", "predecessors": [], "duration": 2},
+    "B": {"name": "", "predecessors": [], "duration": 4},
+    "C": {"name": "", "predecessors": ["A", "B"], "duration": 4},
+    "D": {"name": "", "predecessors": ["C"], "duration": 6},
+    "E": {"name": "", "predecessors": ["C"], "duration": 5},
+    "F": {"name": "", "predecessors": ["E"], "duration": 5},
+    "G": {"name": "", "predecessors": ["D"], "duration": 6},
+    "H": {"name": "", "predecessors": ["E", "G"], "duration": 9},
+    "I": {"name": "", "predecessors": ["C"], "duration": 8},
+    "J": {"name": "", "predecessors": ["F", "I"], "duration": 7},
+    "K": {"name": "", "predecessors": ["J"], "duration": 4},
+    "L": {"name": "", "predecessors": ["J"], "duration": 6},
+    "M": {"name": "", "predecessors": ["H"], "duration": 2},
+    "N": {"name": "", "predecessors": ["K", "L"], "duration": 6},
+}
+
+project_network = ProjectNetwork(tasks)
+project_network.draw()
