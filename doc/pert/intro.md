@@ -40,7 +40,7 @@ from networkx.drawing.nx_pydot import graphviz_layout
 AOA では、作業を辺で表現し、先行関係をノードで表現する。AON では、作業を頂点（node）で表現し、先行関係を辺（edge）で表現する。日本の教科書では AOA が一般的であるが、AON のほうが理解と作成が容易であるため、海外の教科書では AON が一般的で、実務でも AON がよく使われる[@Camm2022-zv; @Hillier2025-cb; @Eiselt2022-qy]。これ以降の説明では、AON を用いる。
 
 :::{prf:example}
-:label: example:pert_1
+:label: example:pert-1
 
 学生の田中さんと佐藤さんが協力し、ある授業のレポートを作成することになった。このレポートを作成するためには、下の表に示すように、いくつかの作業を行う必要がある。
 
@@ -97,7 +97,7 @@ class ProjectNetwork:
             self.G,
             pos,
             with_labels=False,
-            node_size=2000,
+            node_size=1500,
             node_color="lightyellow",
             edgecolors="black",
             arrows=True,
@@ -129,15 +129,15 @@ project_network.draw()
 作業リストに示す作業に加えて、プロジェクト・ネットワークには、**始点**（Start Node）と**終点**（Finish Node）が含まれる。始点は、先行作業を持たない作業から接続される。終点は、後続作業を持たない作業から接続される。上の例では、先行作業を持たない作業は A であり、後続作業を持たない作業は E であるため、始点から A に接続され、E から終点に接続されている。
 
 :::{prf:example}
-:label: example:pert_2
+:label: example:pert-2
 
 以下の作業リストに基づいて、プロジェクト・ネットワークを作成せよ。
 
 | 作業 | 先行作業 | 時間（日） |
 | ---- | -------- | ---------- |
 | A    | -        | 2          |
-| B    | -        | 4          |
-| C    | A, B     | 4          |
+| B    | A        | 4          |
+| C    | B        | 4          |
 | D    | C        | 6          |
 | E    | C        | 5          |
 | F    | E        | 5          |
@@ -157,8 +157,8 @@ project_network.draw()
 
 tasks = {
     "A": {"name": "", "predecessors": [], "duration": 2},
-    "B": {"name": "", "predecessors": [], "duration": 4},
-    "C": {"name": "", "predecessors": ["A", "B"], "duration": 4},
+    "B": {"name": "", "predecessors": ["A"], "duration": 4},
+    "C": {"name": "", "predecessors": ["B"], "duration": 4},
     "D": {"name": "", "predecessors": ["C"], "duration": 6},
     "E": {"name": "", "predecessors": ["C"], "duration": 5},
     "F": {"name": "", "predecessors": ["E"], "duration": 5},
@@ -178,4 +178,4 @@ project_network.draw()
 
 ## クリティカルパス
 
-プロジェクト・ネットワークにおいて、始点から終点までの経路を**パス**（path）と呼ぶ。
+プロジェクト・ネットワークにおいて、始点から終点までの経路を**パス**（path）と呼ぶ。例えば、[](#example:pert-2) には、Start → A → C → D → G → H → M → Finish、Start → B → C → E → F → J → K → N → Finish など、複数のパスが存在する。
